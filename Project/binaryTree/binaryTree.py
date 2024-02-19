@@ -8,7 +8,7 @@ binaryTree.treeStatus = binaryTree.insert(binaryTree.treeStatus, 9)
 binaryTree.treeStatus = binaryTree.insert(binaryTree.treeStatus, 15)
 binaryTree.treeStatus = binaryTree.insert(binaryTree.treeStatus, 5)
 
-def practica01():
+def BinaryTree():
     while True:
         os.system('cls')
 
@@ -48,6 +48,7 @@ def practica01():
 
         elif opc == '6':
             print("\nElegiste salir...\n")
+            
             os.system("pause")
             break
         else:
