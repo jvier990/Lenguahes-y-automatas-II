@@ -13,7 +13,7 @@ def BinaryTree():
         os.system('cls')
 
         print('Arbol ABB')
-        opc = input("\n1.-Insertar nodo \n2.-Inorden \n3.-Preorden \n4.-Postorden \n5.-Buscar \n6.-Salir \n\nElige una opcion -> ")
+        opc = input("\n1.-Insertar nodo \n2.-Inorden \n3.-Preorden \n4.-Postorden \n5.-Buscar \n6.-Eliminar Nodo \n7.-Salir \n\nElige una opcion -> ")
 
         if opc == '1':
             node = input("\nIngresa el nodo -> ")
@@ -45,8 +45,11 @@ def BinaryTree():
                 print('Nodo no encontrado')
             else:
                 print("\nNodo encontrado -> ",binaryTree.search(node, binaryTree.treeStatus), " si existe...")
-
         elif opc == '6':
+            node = int(input('Elige el nodo a eliminar'))
+            print('Nodo eliminado ->', binaryTree.delete(binaryTree.treeStatus, node),)
+
+        elif opc == '7':
             print("\nElegiste salir...\n")
             
             os.system("pause")

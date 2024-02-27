@@ -52,10 +52,31 @@ class Tree:
                     if data > node.data:
                         return self.search(data,node.right)
 
+    def find_min_node(self, node):
+        current = node
+        while current.left is not None:
+            current = current.left
+        return current
 
-        
+    def delete(self, node, data):
+        if node is None:
+            return node
+        if data < node.data:
+            node.left = self.delete(node.left, data)
+        elif data > node.data:
+            node.right = self.delete(node.right, data)
+        else:
+            if node.left is None:
+                temp = node.right
+                node = None
+                return temp
+            elif node.right is None:
+                temp = node.left
+                node = None
+                return temp
+            temp = self.find_min_node(node.right)
+            node.data = temp.data
+            node.right = self.delete(node.right, temp.data)
 
-
-
-
+        return node
 
