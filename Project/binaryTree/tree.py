@@ -1,19 +1,46 @@
 from .node import Node
+import networkx as nx
+import matplotlib.pyplot as plt
 
 class Tree:
     def __init__(self):
         self.treeStatus = None
+        self.G = nx.Graph()
+
+    def getGraph(self):
+        return self.G
+    
+    def defPositions(self,node,pos,x,y):
+        
+        if node is not None:
+            if (x,y) in pos.values():
+                pos[node.data] = (x + 0.75, y +0.5)
+            else:
+                pos[node.data] = (x , y)
+
+        if node.left is not None:
+            self.defPositions(node.left, pos, x - 2, y - 1)
+        if node.right is not None:
+            self.defPositions(node.right, pos, x + 2, y - 1)
+
+        print(pos)
+        return pos    
+
 
     def insert(self,node,data):
         if node == None:
             node = Node(data)
         else:
             if data < node.data:
+                if node.left is None:
+                    self.G.add_edge(node.data, data)
                 node.left = self.insert(node.left,data)
             else:
+                if node.right is None:
+                    self.G.add_edge(node.data, data)
                 node.right = self.insert(node.right,data)
-                
         return node
+    
     #izquierdo, raíz, derecha
     def inodern(self, node):
         if node == None:
@@ -58,6 +85,31 @@ class Tree:
             current = current.left
         return current
 
+    def deleteInGraph(self, node, data):
+        if node is None:
+            return node
+
+        if data == node:
+            father = None
+            for i, j in self.G.edges():
+                if i == data:
+                    father = j
+                    break
+            if father is not None:
+                for child in nx.descendants(self.G, data):
+                    self.G.add_edge(father, child)
+            self.G.remove_node(data)
+            return None
+
+        if data < node.data:
+            self.G.remove_edge(node, data)
+            self.delete(data, data)
+        else:
+            self.G.remove_edge(node, data)
+            self.delete(data, data)
+
+        return node
+    
     def delete(self, node, data):
         if node is None:
             return node
@@ -79,4 +131,3 @@ class Tree:
             node.right = self.delete(node.right, temp.data)
 
         return node
-
