@@ -7,17 +7,17 @@ import os
 binaryTree = Tree()
 binaryTree.treeStatus = binaryTree.insert(binaryTree.treeStatus, 7)
 binaryTree.treeStatus = binaryTree.insert(binaryTree.treeStatus, 4)
-#binaryTree.treeStatus = binaryTree.insert(binaryTree.treeStatus, 9)
-#binaryTree.treeStatus = binaryTree.insert(binaryTree.treeStatus, 15)
-#binaryTree.treeStatus = binaryTree.insert(binaryTree.treeStatus, 5)
-#binaryTree.treeStatus = binaryTree.insert(binaryTree.treeStatus, 1)
-#binaryTree.treeStatus = binaryTree.insert(binaryTree.treeStatus, 23)
-#binaryTree.treeStatus = binaryTree.insert(binaryTree.treeStatus, 8)
-#binaryTree.treeStatus = binaryTree.insert(binaryTree.treeStatus, 6)
-#binaryTree.treeStatus = binaryTree.insert(binaryTree.treeStatus, 10)
-#binaryTree.treeStatus = binaryTree.insert(binaryTree.treeStatus, 0.5)
-#binaryTree.treeStatus = binaryTree.insert(binaryTree.treeStatus, 0.7)
-#binaryTree.treeStatus = binaryTree.insert(binaryTree.treeStatus, 0.01)
+binaryTree.treeStatus = binaryTree.insert(binaryTree.treeStatus, 9)
+binaryTree.treeStatus = binaryTree.insert(binaryTree.treeStatus, 15)
+binaryTree.treeStatus = binaryTree.insert(binaryTree.treeStatus, 5)
+binaryTree.treeStatus = binaryTree.insert(binaryTree.treeStatus, 1)
+binaryTree.treeStatus = binaryTree.insert(binaryTree.treeStatus, 23)
+binaryTree.treeStatus = binaryTree.insert(binaryTree.treeStatus, 8)
+binaryTree.treeStatus = binaryTree.insert(binaryTree.treeStatus, 6)
+binaryTree.treeStatus = binaryTree.insert(binaryTree.treeStatus, 10)
+binaryTree.treeStatus = binaryTree.insert(binaryTree.treeStatus, 0.5)
+binaryTree.treeStatus = binaryTree.insert(binaryTree.treeStatus, 0.7)
+binaryTree.treeStatus = binaryTree.insert(binaryTree.treeStatus, 0.01)
 
 
 
@@ -64,7 +64,8 @@ def BinaryTree():
         elif opc == '6':
             node = int(input('Elige el nodo a eliminar'))
             print('Nodo eliminado ->', binaryTree.delete(binaryTree.treeStatus, node),)
-            binaryTree.deleteInGraph(node, node)
+            #binaryTree.deleteInGraph(node, node)
+            binaryTree.deleteInGraph(binaryTree.treeStatus,node)
 
 
         elif opc == '7':

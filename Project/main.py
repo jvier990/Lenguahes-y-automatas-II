@@ -1,5 +1,4 @@
 import os
-
 from Calculadora.calculator import lexer
 from utils.isAcceptable import isAcceptable as practica01
 from binaryTree.binaryTree import BinaryTree as practica02
@@ -34,4 +33,5 @@ def improvMenu():
         print()
         os.system("pause")
     return None
+
 improvMenu()

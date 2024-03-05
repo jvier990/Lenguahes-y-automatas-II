@@ -8,8 +8,8 @@ class Tree:
         self.G = nx.Graph()
 
     def getGraph(self):
+        print(self.G.edges)
         return self.G
-    
     def defPositions(self,node,pos,x,y):
         
         if node is not None:
@@ -84,31 +84,37 @@ class Tree:
         while current.left is not None:
             current = current.left
         return current
+    
 
-    def deleteInGraph(self, node, data):
-        if node is None:
-            return node
 
-        if data == node:
-            father = None
-            for i, j in self.G.edges():
-                if i == data:
-                    father = j
-                    break
-            if father is not None:
-                for child in nx.descendants(self.G, data):
-                    self.G.add_edge(father, child)
-            self.G.remove_node(data)
-            return None
+    def deleteInGraph_2(self, data):
+        print(self.G.edges)
+        father = None
+        childs = []
+        desendencia =[]
+        newFather = None
+        newChild = []
+        for f, c in self.G.edges:
+            if c == data: 
+                father = (f, c)
+            elif f == data:
+                childs.append((f,c))
+       
+            break
+        min_y = min(tupla[1] for tupla in childs)
+        tupleDelete = childs + [father]
+        self.G.edges = [tupla for tupla in self.G.edges if tupla not in tupleDelete]
+        father = (father[0],min_y)
+        
+        print(nx.descendants(self.G, data))
+        print(self.G.edges)
+        print(min_y)
+        print(father)
+        print(childs)
 
-        if data < node.data:
-            self.G.remove_edge(node, data)
-            self.delete(data, data)
-        else:
-            self.G.remove_edge(node, data)
-            self.delete(data, data)
 
-        return node
+        return None
+    
     
     def delete(self, node, data):
         if node is None:
@@ -126,8 +132,48 @@ class Tree:
                 temp = node.left
                 node = None
                 return temp
+            
             temp = self.find_min_node(node.right)
             node.data = temp.data
             node.right = self.delete(node.right, temp.data)
 
         return node
+
+    def deleteInGraph(self, node, data):
+        if node is None:
+            return node
+        if data == node.data:
+            father = None
+            child = None
+            print(self.G.edges())
+            for i, j in self.G.edges():
+                print(i,j)
+                if j == data:
+                    father = i
+                    print(i,j)
+
+            if data < father:
+                temp = self.find_min_node(node.right)
+                self.G.add_edge(father,temp)
+                self.G.add_edge(temp,node.left)
+                #self.G.add_edge(temp,node.right)
+                self.G.remove_edge(father, data)
+                self.G.remove_edge(data, node.right)
+                self.G.remove_edge(data, node.left)
+                self.G.remove_node(data)
+                #self.G.remove_edge(node.right, temp)
+            else:
+                self.G.remove_edge(data, father)
+            
+            self.G.remove_node(data)
+            return None
+
+        if data < node.data:
+            #self.G.remove_edge(node.data, data)
+            self.delete(node.left, data)
+        elif data > node.data:
+            #self.G.remove_edge(node.data, data)
+            self.delete(node.right, data)
+
+        return node
+  
