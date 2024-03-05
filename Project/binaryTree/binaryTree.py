@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import os
 
 binaryTree = Tree()
+binaryTree.setRoot(7)
 binaryTree.treeStatus = binaryTree.insert(binaryTree.treeStatus, 7)
 binaryTree.treeStatus = binaryTree.insert(binaryTree.treeStatus, 4)
 binaryTree.treeStatus = binaryTree.insert(binaryTree.treeStatus, 9)
@@ -62,12 +63,11 @@ def BinaryTree():
             else:
                 print("\nNodo encontrado -> ",binaryTree.search(node, binaryTree.treeStatus), " si existe...")
         elif opc == '6':
-            node = int(input('Elige el nodo a eliminar'))
+            node = float(input('Elige el nodo a eliminar'))
+            binaryTree.deleteInGraph(binaryTree.treeStatus,node)
             print('Nodo eliminado ->', binaryTree.delete(binaryTree.treeStatus, node),)
             #binaryTree.deleteInGraph(node, node)
-            binaryTree.deleteInGraph(binaryTree.treeStatus,node)
-
-
+            
         elif opc == '7':
             nx.draw(binaryTree.getGraph(), binaryTree.defPositions(binaryTree.treeStatus,{},0,0), with_labels=True, node_size=700, node_color='lightgreen', font_size=15)
             plt.show() 

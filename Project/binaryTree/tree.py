@@ -6,10 +6,16 @@ class Tree:
     def __init__(self):
         self.treeStatus = None
         self.G = nx.Graph()
+        self.root = None
 
+    def setRoot(self,root):
+        self.root = root
+    def getRoot(self):
+        return self.root
     def getGraph(self):
         print(self.G.edges)
         return self.G
+    
     def defPositions(self,node,pos,x,y):
         
         if node is not None:
@@ -26,7 +32,6 @@ class Tree:
         print(pos)
         return pos    
 
-
     def insert(self,node,data):
         if node == None:
             node = Node(data)
@@ -40,7 +45,6 @@ class Tree:
                     self.G.add_edge(node.data, data)
                 node.right = self.insert(node.right,data)
         return node
-    
     #izquierdo, raíz, derecha
     def inodern(self, node):
         if node == None:
@@ -84,38 +88,17 @@ class Tree:
         while current.left is not None:
             current = current.left
         return current
+    def find_min_nodeForRoot(self, node):
+        current = node.right
+        while current.left is not None:
+            current = current.left
+        return current
     
 
-
-    def deleteInGraph_2(self, data):
-        print(self.G.edges)
-        father = None
-        childs = []
-        desendencia =[]
-        newFather = None
-        newChild = []
-        for f, c in self.G.edges:
-            if c == data: 
-                father = (f, c)
-            elif f == data:
-                childs.append((f,c))
-       
-            break
-        min_y = min(tupla[1] for tupla in childs)
-        tupleDelete = childs + [father]
-        self.G.edges = [tupla for tupla in self.G.edges if tupla not in tupleDelete]
-        father = (father[0],min_y)
-        
-        print(nx.descendants(self.G, data))
-        print(self.G.edges)
-        print(min_y)
-        print(father)
-        print(childs)
-
-
-        return None
+    def getData(self,node):
+        return node.data
     
-    
+
     def delete(self, node, data):
         if node is None:
             return node
@@ -131,49 +114,106 @@ class Tree:
             elif node.right is None:
                 temp = node.left
                 node = None
-                return temp
-            
+                return temp   
+                     
             temp = self.find_min_node(node.right)
             node.data = temp.data
             node.right = self.delete(node.right, temp.data)
+        return node
+    
+    def delete2(self, node, data):
+        if node is None:
+            return node
+    
+        # Si el nodo a eliminar es la raíz
+        if data == node.data:
+            # Si el nodo raíz no tiene hijos
+            if node.left is None and node.right is None:
+                return None
+            # Si el nodo raíz solo tiene un hijo
+            elif node.left is None:
+                return node.right
+            elif node.right is None:
+                return node.left
+            # Si el nodo raíz tiene dos hijos
+            else:
+                temp = self.find_min_node(node.right)
+                node.data = temp.data
+                node.right = self.delete(node.right, temp.data)
+                return node
+
+        # Si el nodo a eliminar no es la raíz, continuar con el proceso habitual
+        if data < node.data:
+            node.left = self.delete(node.left, data)
+        else:
+            node.right = self.delete(node.right, data)
 
         return node
+    
 
     def deleteInGraph(self, node, data):
         if node is None:
             return node
         if data == node.data:
+            print('Nodos:')
+            print(self.G.nodes)
+            print('Aristas:')
+            print(self.G.edges)  
             father = None
-            child = None
-            print(self.G.edges())
             for i, j in self.G.edges():
-                print(i,j)
                 if j == data:
                     father = i
-                    print(i,j)
+            print(data,',',node.data)
+            if(data == self.getRoot()):
+                temp = self.find_min_nodeForRoot(node.right)
+                temp = self.getData(temp)               
+                self.G.remove_edge(data, self.getData(node.left))
+                self.G.remove_edge(data, self.getData(node.right))
+                self.G.remove_edge(self.getData(node.right), temp)
+                self.G.remove_edge(data, self.getData(node.right))
+                self.G.add_edge( self.getData(node.right) , self.getData(node.left))
+                return None
 
-            if data < father:
-                temp = self.find_min_node(node.right)
-                self.G.add_edge(father,temp)
-                self.G.add_edge(temp,node.left)
-                #self.G.add_edge(temp,node.right)
+            if node.left is None and node.right is not None:
+                self.G.add_edge(father, self.getData(node.right))
                 self.G.remove_edge(father, data)
-                self.G.remove_edge(data, node.right)
-                self.G.remove_edge(data, node.left)
+                self.G.remove_edge(data, self.getData(node.right))
                 self.G.remove_node(data)
-                #self.G.remove_edge(node.right, temp)
-            else:
-                self.G.remove_edge(data, father)
-            
+                return None
+
+            if node.right is None and node.left is not None:
+                self.G.add_edge(father, self.getData(node.left))
+                self.G.remove_edge(father, data)
+                self.G.remove_edge(data, self.getData(node.left))
+                self.G.remove_node(data)
+                return None
+
+            if node.right is None and node.left is None:
+                
+                self.G.remove_edge(father, data)
+                self.G.remove_node(data)
+                return None
+
+
+            temp = self.find_min_node(node.right)
+            temp = self.getData(temp)
+            self.G.add_edge(father,temp)
+            self.G.add_edge(temp, self.getData(node.left))
+            self.G.remove_edge(father, data)
+            self.G.remove_edge(data, self.getData(node.right))
+            self.G.remove_edge(data, self.getData(node.left))
             self.G.remove_node(data)
+            print('Nodos:')
+            print(self.G.nodes)
+            print('Aristas:')
+            print(self.G.edges)          
             return None
 
         if data < node.data:
-            #self.G.remove_edge(node.data, data)
-            self.delete(node.left, data)
+            self.deleteInGraph(node.left, data)
         elif data > node.data:
-            #self.G.remove_edge(node.data, data)
-            self.delete(node.right, data)
+
+            self.deleteInGraph(node.right, data)
 
         return node
   
